@@ -73,7 +73,7 @@ function build_ior {
   pushd $BUILD/ior
   ./bootstrap
   # Add here extra flags
-  ./configure --prefix=$INSTALL_DIR
+  ./configure --prefix=$INSTALL_DIR --without-cuda
   cd src
   $MAKE clean
   $MAKE install

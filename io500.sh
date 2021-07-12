@@ -9,15 +9,31 @@
 # "system-information.txt" file, by pasting the output of the info-creator.
 # This file contains details of your system hardware for your submission.
 
+: ${NPROCS:=20}
+: ${GKFS_MOUNT_DIR:="/scr/gekkofs_mount"}
+: ${OUTPUT_DIR:="/work/NBB/$USER/bench_results/io500-gekkofs/$(date +%Y.%m.%d-%H.%M.%S)"}
+: ${LIBGKFS_LOG_OUTPUT:="/scr/libgkfs.log"}
+: ${LIBGKFS_LOG:="info"}
+: ${LIBGKFS_INTERCEPT_LIB:="/work/NBB/$USER/GekkoFS/build-Release/lib/libgkfs_intercept.so"}
+: ${LIBGKFS_HOSTS_FILE:="/work/NBB/$USER/gkfs_hosts.txt"}
+
 # This script takes its parameters from the same .ini file as io500 binary.
 io500_ini="$1"          # You can set the ini file here
 io500_mpirun="mpiexec"
-io500_mpiargs="-np 2"
+io500_mpiargs="${NQSII_MPIOPTS} -np ${NPROCS} --oversubscribe --map-by node \
+-x LIBGKFS_LOG_OUTPUT=${LIBGKFS_LOG_OUTPUT} \
+-x LIBGKFS_LOG=${LIBGKFS_LOG} \
+-x LD_PRELOAD=${LIBGKFS_INTERCEPT_LIB} \
+-x LIBGKFS_HOSTS_FILE=${LIBGKFS_HOSTS_FILE}"
 
 function setup(){
   local workdir="$1"
   local resultdir="$2"
+
   mkdir -p $workdir $resultdir
+  LD_PRELOAD=${LIBGKFS_INTERCEPT_LIB} \
+  LIBGKFS_HOSTS_FILE=${LIBGKFS_HOSTS_FILE} \
+    mkdir -p ${workdir}/{ior_easy,ior_hard,mdtest_easy,mdtest_hard,mdtest-rnd}
 
   # Example commands to create output directories for Lustre.  Creating
   # top-level directories is allowed, but not the whole directory tree.
