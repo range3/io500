@@ -10,8 +10,6 @@
 # This file contains details of your system hardware for your submission.
 
 : ${NPROCS:=20}
-: ${GKFS_MOUNT_DIR:="/scr/gekkofs_mount"}
-: ${OUTPUT_DIR:="/work/NBB/$USER/bench_results/io500-gekkofs/$(date +%Y.%m.%d-%H.%M.%S)"}
 : ${LIBGKFS_LOG_OUTPUT:="/scr/libgkfs.log"}
 : ${LIBGKFS_LOG:="info"}
 : ${LIBGKFS_INTERCEPT_LIB:="/work/NBB/$USER/GekkoFS/build-Release/lib/libgkfs_intercept.so"}
